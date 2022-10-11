@@ -17,6 +17,8 @@ from gpu_utils import assign_to_gpu, average_grads_and_vars
 
 import numpy as np
 
+tf.compat.v1.disable_eager_execution()
+
 # GPU config
 flags.DEFINE_integer("num_hosts", default=1,
       help="Number of TPU hosts")
@@ -247,9 +249,10 @@ def train(n_token, cutoffs, ps_device):
 
   tower_mems, tower_losses, tower_new_mems, tower_grads_and_vars = [], [], [], []
 
+  gpus = tf.config.list_logical_devices('GPU')
   for i in range(FLAGS.num_core_per_host):
     reuse = True if i > 0 else None
-    with tf.device(assign_to_gpu(i, ps_device)), \
+    with tf.device(gpus[0].name), \
         tf.compat.v1.variable_scope(tf.compat.v1.get_variable_scope(), reuse=reuse):
 
       mems_i = [tf.compat.v1.placeholder(tf.float32,

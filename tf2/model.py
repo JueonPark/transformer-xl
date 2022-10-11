@@ -24,7 +24,8 @@ def positionwise_FF(inp, d_model, d_inner, dropout, kernel_initializer,
                              name='layer_2')
     output = tf.compat.v1.layers.dropout(output, dropout, training=is_training,
                                name='drop_2')
-    output = tf.contrib.layers.layer_norm(output + inp, begin_norm_axis=-1)
+    layernorm = tf.keras.layers.LayerNormalization(axis=-1)
+    output = layernorm(output + inp)
   return output
 
 
@@ -87,8 +88,12 @@ def rel_multihead_attn(w, r, r_w_bias, r_r_bias, attn_mask, mems, d_model,
     attn_out = tf.compat.v1.layers.dense(attn_vec, d_model, use_bias=False,
                                kernel_initializer=kernel_initializer, name='o')
     attn_out = tf.compat.v1.layers.dropout(attn_out, dropout, training=is_training)
-
-    output = tf.contrib.layers.layer_norm(attn_out + w, begin_norm_axis=-1)
+    
+    print(attn_out)
+    print(w)
+    # result = tf.add(attn_out + w)
+    layernorm = tf.keras.layers.LayerNormalization(axis=-1)
+    output = layernorm(attn_out + w)
   return output
 
 
