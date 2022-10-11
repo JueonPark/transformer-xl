@@ -18,7 +18,10 @@ def average_grads_and_vars(tower_grads_and_vars):
 
         grad = grad_and_vars[0][0]
         for g, _ in grad_and_vars[1:]:
-            grad += g
+            try:
+                grad += g
+            except:
+                grad += 0
         return grad / len(grad_and_vars)
 
     def average_sparse(grad_and_vars):
