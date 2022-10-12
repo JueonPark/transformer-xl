@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 # Data
 DATA_ROOT=../data/enwik8/
 
@@ -17,6 +19,8 @@ MEM_LEN=512
 
 BSZ=4
 NUM_CORE=4
+
+TRAIN_STEPS=1
 
 # Testing
 TEST_TGT_LEN=80
@@ -62,7 +66,7 @@ elif [[ $1 == 'train' ]]; then
         --dropatt=0.0 \
         --learning_rate=0.00025 \
         --warmup_steps=0 \
-        --train_steps=400000 \
+        --train_steps=${TRAIN_STEPS} \
         --tgt_len=${TGT_LEN} \
         --mem_len=${MEM_LEN} \
         --train_batch_size=${BSZ} \
